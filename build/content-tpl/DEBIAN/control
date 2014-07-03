@@ -7,7 +7,7 @@ Architecture: armhf
 Suggests: xbian-package-xbmc
 Breaks: xbian-update (<<1.0-1.2)
 Maintainer: mk01 <development@xbian.org>
-Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libavcodec53 (>= 6:0.8.3-1~) | libavcodec-extra-53 (>= 6:0.8.6), libavformat53 (>= 6:0.8.3-1~), libavutil51 (>= 6:0.8.3-1~), libc6 (>= 2.13-28), libcurl3-gnutls (>= 7.16.2), libgcc1 (>= 1:4.4.0), libssl1.0.0 (>= 1.0.0), libswscale2 (>= 6:0.8.3-1~), zlib1g (>= 1:1.1.4)
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.13-28), libcurl3-gnutls (>= 7.16.2), libgcc1 (>= 1:4.4.0), libssl1.0.0 (>= 1.0.0), zlib1g (>= 1:1.1.4)
 Replaces: hts-tvheadend
 Homepage: https://tvheadend.org
 Description: TVHeadEnd (__ARCHBRANCH__)
