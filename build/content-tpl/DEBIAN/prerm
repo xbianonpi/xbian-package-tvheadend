@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ $1 == "remove" ]; then
+    :
+fi
+
+if [ "$1" = purge ]; then
+
+    stop -q tvheadend 2>/dev/null
+
+fi

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$1" = purge ]; then
+
+    rm -fr /home/xbian/.hts/tvheadend
+    
+fi
+

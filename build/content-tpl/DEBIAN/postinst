@@ -1,0 +1,53 @@
+#!/bin/bash
+
+if [[ $1 == "configure" ]]; then
+
+    if [ ! -e /home/xbian/.hts/tvheadend/accesscontrol ] || [ "$(ls /home/xbian/.hts/tvheadend/accesscontrol 2>/dev/null| grep -c . )" -eq 0 ]; then
+    
+        mkdir -p /home/xbian/.hts/tvheadend/accesscontrol
+cat <<\EOF > /home/xbian/.hts/tvheadend/accesscontrol/1
+{
+        "enabled": 1,
+        "username": "xbian",
+        "password": "raspberry",
+        "comment": "Default access entry",
+        "prefix": "0.0.0.0/0,::/0",
+        "streaming": 1,
+        "dvr": 1,
+        "dvrallcfg": 1,
+        "webui": 1,
+        "admin": 1,
+        "id": "1"
+}
+
+EOF
+
+        printf "\n\n%s\n\n" "CREATED DEFAULT USER 'xbian' WITH DEFAULT PASSWORD 'raspberry' AND WORLD WIDE ACCESS. PLEASE CONSIDER CHANGING LATER BY ACCESSING CONFIGURATION->ACCESS CONTROL IN THE WEB CONFIGURATION TOOL."
+        touch /tmp/tvheadend.init
+
+    else
+        [ -e /etc/default/tvheadend ] && . /etc/default/tvheadend
+        [ $TVH_GROUP = video ] && sed -i 's%TVH_GROUP=.*%TVH_GROUP="xbian"%' /etc/default/tvheadend
+        [ -z "$TVH_CONF_DIR" ] && sed -i 's%TVH_CONF_DIR=.*%TVH_CONF_DIR="/home/xbian/.hts/tvheadend"%' /etc/default/tvheadend
+    fi
+
+    if status tvheadend | grep -q running; then
+        stop -q tvheadend
+        touch /tmp/tvheadend.start
+    fi
+
+    [ -e /tmp/tvheadend.init ] && chown -R xbian:xbian /home/xbian/.hts
+    rm -f /tmp/tvheadend.init 
+
+    [ -e /tmp/tvheadend.start ] && start -q tvheadend  2>/dev/null
+    rm -f /tmp/tvheadend.start
+    
+    grep -q "tvheadend" /usr/local/include/xbian-config/config/services || echo "tvheadend:" >> /usr/local/include/xbian-config/config/services
+
+elif [ $1 = triggered ]; then
+
+    :
+
+fi
+
+exit 0

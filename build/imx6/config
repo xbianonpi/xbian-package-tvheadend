@@ -1,0 +1,2 @@
+config_build_env=schroot -c armhfjessie -p --
+config_deb_pkgname=xbian-package-tvheadend-6q
