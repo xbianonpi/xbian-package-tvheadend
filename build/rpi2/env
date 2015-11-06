@@ -1,0 +1,2 @@
+CFLAGS=-O3 -pipe -mtune=cortex-a7 -mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon -mabi=aapcs-linux -Wno-psabi -Wa,-mno-warn-deprecated -Wno-deprecated-declarations 
+CPPFLAGS=-Wa,-mno-warn-deprecated -Wno-deprecated-declarations
