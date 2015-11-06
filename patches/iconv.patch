@@ -1,0 +1,12 @@
+--- a/Makefile	2015-05-22 16:42:04.000000000 +0200
++++ b/Makefile	2015-11-06 12:03:15.199626469 +0100
+@@ -38,9 +38,6 @@
+ else
+ LDFLAGS += -ldl -lpthread -lm
+ endif
+-ifeq ($(CONFIG_LIBICONV),yes)
+-LDFLAGS += -liconv
+-endif
+ ifeq ($(PLATFORM), darwin)
+ LDFLAGS += -framework CoreServices
+ else
