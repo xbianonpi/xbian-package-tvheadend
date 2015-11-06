@@ -1,2 +1,4 @@
 
+[ -e .config.mk ] || return 0
+
 grep -q CONFIG_LIBICONV .config.mk || echo "CONFIG_LIBICONV = yes" >> .config.mk
