@@ -1,2 +1,2 @@
 
-sed -i "s%LDFLAGS += -L/usr/lib/arm-linux-gnueabihf -lz%LDFLAGS += -lz%" ./.config.mk
+[ ! -e ./.config.mk ] || sed -i "s%LDFLAGS += -L/usr/lib/arm-linux-gnueabihf -lz%LDFLAGS += -lz%" ./.config.mk

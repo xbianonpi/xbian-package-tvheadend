@@ -1,4 +1,4 @@
-[ ! -e ../config_pkgver ] && return
+##[ ! -e ../config_pkgver ] && return
 
 support/version src/version.c
 
