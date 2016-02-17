@@ -1,2 +1,2 @@
 config_build_env=schroot -c armhfjessie -p --
-config_deb_pkgname=xbian-package-tvheadend-6q
+config_deb_ctrlextra=Replaces: xbian-package-tvheadend-6q (<< 4.1-1525-1455718005~), hts-tvheadend\\nConflicts: xbian-package-tvheadend-6q (<< 4.1-1525-1455718005~)\\nBreaks: xbian-package-tvheadend-6q (<< 4.1-1525-1455718005~), xbian-update (<<1.0-1.2)
