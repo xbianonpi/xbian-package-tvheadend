@@ -5,24 +5,25 @@ if [[ $1 == "configure" ]]; then
     if [ ! -e /home/xbian/.hts/tvheadend/accesscontrol ] || [ "$(ls /home/xbian/.hts/tvheadend/accesscontrol 2>/dev/null| grep -c . )" -eq 0 ]; then
     
         mkdir -p /home/xbian/.hts/tvheadend/accesscontrol
-cat <<\EOF > /home/xbian/.hts/tvheadend/accesscontrol/1
-{
-        "enabled": 1,
-        "username": "xbian",
-        "password": "raspberry",
-        "comment": "Default access entry",
-        "prefix": "0.0.0.0/0,::/0",
-        "streaming": 1,
-        "dvr": 1,
-        "dvrallcfg": 1,
-        "webui": 1,
-        "admin": 1,
-        "id": "1"
-}
+#cat <<\EOF > /home/xbian/.hts/tvheadend/accesscontrol/1
+#{
+#        "enabled": 1,
+#        "username": "xbian",
+#        "password": "raspberry",
+#        "comment": "Default access entry",
+#        "prefix": "0.0.0.0/0,::/0",
+#        "streaming": 1,
+#        "dvr": 1,
+#        "dvrallcfg": 1,
+#        "webui": 1,
+#        "admin": 1,
+#        "id": "1"
+#}
+#
+#EOF
 
-EOF
-
-        printf "\n\n%s\n\n" "CREATED DEFAULT USER 'xbian' WITH DEFAULT PASSWORD 'raspberry' AND WORLD WIDE ACCESS. PLEASE CONSIDER CHANGING LATER BY ACCESSING CONFIGURATION->ACCESS CONTROL IN THE WEB CONFIGURATION TOOL."
+        #printf "\n\n%s\n\n" "CREATED DEFAULT USER 'xbian' WITH DEFAULT PASSWORD 'raspberry' AND WORLD WIDE ACCESS. PLEASE CONSIDER CHANGING LATER BY ACCESSING CONFIGURATION->ACCESS CONTROL IN THE WEB CONFIGURATION TOOL."
+        printf "\n\n%s\n\n" "CREATED DEFAULT EMPTY USER WITH NO PASSWORD AND WORLD WIDE ACCESS. PLEASE CONSIDER CHANGING LATER BY ACCESSING CONFIGURATION->ACCESS CONTROL IN THE WEB CONFIGURATION TOOL."
         touch /tmp/tvheadend.init
 
     else
