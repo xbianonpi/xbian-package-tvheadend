@@ -1,4 +1,4 @@
-rpi stable rpi-jessie
-rpi2 stable rpi2-jessie
-imx6 stable imx6-jessie
+rpi stable rpi-${config_os_version}
+rpi2 stable rpi2-${config_os_version}
+imx6 stable imx6-${config_os_version}
 
