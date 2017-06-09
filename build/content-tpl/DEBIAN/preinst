@@ -2,7 +2,11 @@
 
 if [ $1 == "install" -o $1 == "upgrade" ]; then
 
-:
-
+	if status tvheadend 2>/dev/null | grep -q running; then
+		stop -q tvheadend
+		touch /tmp/tvheadend.start
+	fi
 
 fi
+
+exit 0
