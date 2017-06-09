@@ -2,48 +2,73 @@
 
 if [[ $1 == "configure" ]]; then
 
-    if [ ! -e /home/xbian/.hts/tvheadend/accesscontrol ] || [ "$(ls /home/xbian/.hts/tvheadend/accesscontrol 2>/dev/null| grep -c . )" -eq 0 ]; then
+	chmod 664 /etc/default/tvheadend
+	chgrp xbian /etc/default/tvheadend
+
+	if [ -d /home/xbian/.hts/tvheadend ]; then
+		[ -e /etc/default/tvheadend ] && . /etc/default/tvheadend
+		[ $TVH_GROUP = video ] && sed -i 's%TVH_GROUP=.*%TVH_GROUP="xbian"%' /etc/default/tvheadend
+		[ -z "$TVH_CONF_DIR" ] && sed -i 's%TVH_CONF_DIR=.*%TVH_CONF_DIR="/home/xbian/.hts/tvheadend"%' /etc/default/tvheadend
+	else
+		cp -a /var/tmp/.hts /home/xbian || :
+		if pgrep "xbmc.bin|kodi.bin" >/dev/null; then
+			MSGPATHV='/run/splash'
+			HOSTNAME=$(hostname)
+			/bin/su -c "echo -e \"TVheadend\nTVheadend's WebGUI is accessable under address\nhttp://localhost:9981 or http://$HOSTNAME:9981\nusername: xbian, password raspberry\n\$\" >> $MSGPATHV/msg4kodi" xbian || :
+		else
+			echo "************************************************"
+			echo "***               TVheadend                  ***"
+			echo "***       You can access GUI under           ***"
+			echo "***    http://localhost:9981, user xbian,    ***"
+			echo "***          password raspberry              ***"
+			echo "************************************************"
+		fi
+		touch /tmp/tvheadend.init
+		touch /tmp/tvheadend.start
+	fi
+
+	if ! btrfs-auto-snapshot listvol | grep -qw storage; then
+		btrfs-auto-snapshot createvol storage
+		if grep -q EXCLUDESUB /etc/default/xbian-snap; then
+			if ! grep -q EXCLUDESUB=.*storage /etc/default/xbian-snap; then
+				sed -i "s/EXCLUDESUB=/EXCLUDESUB=storage,/g" /etc/default/xbian-snap
+				sed -i 's/[, \t]*$//' /etc/default/xbian-snap
+			fi
+		else
+			echo EXCLUDESUB=storage >> /etc/default/xbian-snap
+		fi
+		mkdir -p /home/xbian/storage
+		chown -R xbian:xbian /home/xbian/storage
+	fi
+
+	if ! grep -qw /home/xbian/storage /etc/fstab; then
+		echo "# --- Added by xbian-package-tvheadend, modify only if you know what you're doing ---" >> /etc/fstab
+		echo "/dev/root                  /home/xbian/storage     xbian subvol=storage/@,noatime,rw                  0       0" >> /etc/fstab
+	fi
+
+	if ! mountpoint -q /home/xbian/storage; then
+		mount /home/xbian/storage &>/dev/null
+	fi
+
+	mkdir -p /home/xbian/storage/tvheadend/recordings
+	chattr +C /home/xbian/storage/tvheadend/recordings
+	mkdir -p /home/xbian/storage/tvheadend/timeshift
+	chattr +C /home/xbian/storage/tvheadend/timeshift
+	chown -R xbian:xbian /home/xbian/storage/tvheadend
+
+	[ -d /home/xbian/recordings ] || ln -s storage/tvheadend/recordings/ /home/xbian/recordings
+	chown -R xbian:xbian /home/xbian/recordings
+
+	[ -d /home/xbian/timeshift ] || ln -s storage/tvheadend/timeshift/ /home/xbian/timeshift
+	chown -R xbian:xbian /home/xbian/timeshift
+
+	[ -e /tmp/tvheadend.init ] && chown -R xbian:xbian /home/xbian/.hts
+	rm -f /tmp/tvheadend.init
+
+	[ -e /tmp/tvheadend.start ] && start -q tvheadend 2>/dev/null
+	rm -f /tmp/tvheadend.start
     
-        mkdir -p /home/xbian/.hts/tvheadend/accesscontrol
-#cat <<\EOF > /home/xbian/.hts/tvheadend/accesscontrol/1
-#{
-#        "enabled": 1,
-#        "username": "xbian",
-#        "password": "raspberry",
-#        "comment": "Default access entry",
-#        "prefix": "0.0.0.0/0,::/0",
-#        "streaming": 1,
-#        "dvr": 1,
-#        "dvrallcfg": 1,
-#        "webui": 1,
-#        "admin": 1,
-#        "id": "1"
-#}
-#
-#EOF
-
-        #printf "\n\n%s\n\n" "CREATED DEFAULT USER 'xbian' WITH DEFAULT PASSWORD 'raspberry' AND WORLD WIDE ACCESS. PLEASE CONSIDER CHANGING LATER BY ACCESSING CONFIGURATION->ACCESS CONTROL IN THE WEB CONFIGURATION TOOL."
-        printf "\n\n%s\n\n" "CREATED DEFAULT EMPTY USER WITH NO PASSWORD AND WORLD WIDE ACCESS. PLEASE CONSIDER CHANGING LATER BY ACCESSING CONFIGURATION->ACCESS CONTROL IN THE WEB CONFIGURATION TOOL."
-        touch /tmp/tvheadend.init
-
-    else
-        [ -e /etc/default/tvheadend ] && . /etc/default/tvheadend
-        [ $TVH_GROUP = video ] && sed -i 's%TVH_GROUP=.*%TVH_GROUP="xbian"%' /etc/default/tvheadend
-        [ -z "$TVH_CONF_DIR" ] && sed -i 's%TVH_CONF_DIR=.*%TVH_CONF_DIR="/home/xbian/.hts/tvheadend"%' /etc/default/tvheadend
-    fi
-
-    if status tvheadend | grep -q running; then
-        stop -q tvheadend
-        touch /tmp/tvheadend.start
-    fi
-
-    [ -e /tmp/tvheadend.init ] && chown -R xbian:xbian /home/xbian/.hts
-    rm -f /tmp/tvheadend.init 
-
-    [ -e /tmp/tvheadend.start ] && start -q tvheadend  2>/dev/null
-    rm -f /tmp/tvheadend.start
-    
-    grep -q "tvheadend" /usr/local/include/xbian-config/config/services || echo "tvheadend:" >> /usr/local/include/xbian-config/config/services
+	grep -q "tvheadend" /usr/local/include/xbian-config/config/services || echo "tvheadend:" >> /usr/local/include/xbian-config/config/services
 
 elif [ $1 = triggered ]; then
 
