@@ -1,0 +1,2 @@
+config_build_env=schroot -c armhf${config_os_version} -p --
+config_source_branch=release/4.2
