@@ -1,11 +1,9 @@
 #!/bin/bash
 
-if [ $1 == "remove" ]; then
-    :
-fi
+if [ $1 == "remove" -o "$1" == "purge" ]; then
 
-if [ "$1" = purge ]; then
-
-    stop -q tvheadend 2>/dev/null
+	stop -q tvheadend 2>/dev/null
 
 fi
+
+exit 0
