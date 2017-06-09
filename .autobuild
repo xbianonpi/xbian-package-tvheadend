@@ -1,4 +1,11 @@
-rpi stable rpi-${config_os_version}
-rpi2 stable rpi2-${config_os_version}
-imx6 stable imx6-${config_os_version}
+# Master branch to staging
 
+rpi staging rpi-${config_os_version}
+rpi2 staging rpi2-${config_os_version}
+imx6 staging imx6-${config_os_version}
+
+# release/4.2 branch to stable
+
+rpi-4.2 stable rpi-${config_os_version}
+rpi2-4.2 stable rpi2-${config_os_version}
+imx6-4.2 stable imx6-${config_os_version}
