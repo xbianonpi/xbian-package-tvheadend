@@ -6,7 +6,7 @@ Priority: optional
 Architecture: armhf
 __CTRLEXTRA__
 Suggests: xbian-package-xbmc
-Maintainer: mk01 <development@xbian.org>
-Depends: ${shlibs:Depends}, libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.13-28), libcurl3-gnutls (>= 7.16.2), libgcc1 (>= 1:4.4.0), libssl1.0.0 (>= 1.0.0), zlib1g (>= 1:1.1.4), dtv-scan-tables, xmltv-util
+Maintainer: mkreisl <development@xbian.org>
+Depends: ${shlibs:Depends}, libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.13-28), libcurl3-gnutls (>= 7.16.2), libgcc1 (>= 1:4.4.0), libssl1.0.0 (>= 1.0.0), zlib1g (>= 1:1.1.4), dtv-scan-tables, xmltv-util, xbian-package-xbianhome, xbian-package-config-shell
 Homepage: https://tvheadend.org
-Description: TVHeadEnd (__ARCHBRANCH__)
+Description: TVheadend (__ARCHBRANCH__)
