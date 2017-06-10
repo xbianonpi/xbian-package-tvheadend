@@ -10,7 +10,8 @@ if [[ $1 == "configure" ]]; then
 		[ $TVH_GROUP = video ] && sed -i 's%TVH_GROUP=.*%TVH_GROUP="xbian"%' /etc/default/tvheadend
 		[ -z "$TVH_CONF_DIR" ] && sed -i 's%TVH_CONF_DIR=.*%TVH_CONF_DIR="/home/xbian/.hts/tvheadend"%' /etc/default/tvheadend
 	else
-		cp -a /var/tmp/.hts /home/xbian || :
+		chown -R xbian:xbian /usr/local/share/tvheadend/.hts
+		cp -a /usr/local/share/tvheadend/.hts /home/xbian || :
 		if pgrep "xbmc.bin|kodi.bin" >/dev/null; then
 			MSGPATHV='/run/splash'
 			HOSTNAME=$(hostname)
