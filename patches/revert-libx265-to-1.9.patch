@@ -1,17 +1,39 @@
 diff --git a/Makefile.ffmpeg b/Makefile.ffmpeg
-index da9a655..eb1cc14 100644
+index d405932cb..5af0d165c 100644
 --- a/Makefile.ffmpeg
 +++ b/Makefile.ffmpeg
-@@ -52,10 +52,10 @@ LIBX264_URL    = http://ftp.videolan.org/x264/snapshots/$(LIBX264_TB)
- LIBX264_SHA1   = 90c48dab878520a819905880bc4912834fe694fb
- LIBX264_DIFFS  = libx264.configure.diff
+@@ -53,10 +53,10 @@ LIBX264_TB     = $(LIBX264).tar.bz2
+ LIBX264_URL    = http://ftp.videolan.org/x264/snapshots/$(LIBX264_TB)
+ LIBX264_SHA1   = 454c3c96b7c6df19e36f09fffb2a25a60ec657ed
  
--LIBX265        = x265_2.1
+-LIBX265        = x265_2.8
 +LIBX265        = x265_1.9
  LIBX265_TB     = $(LIBX265).tar.gz
  LIBX265_URL    = http://ftp.videolan.org/videolan/x265/$(LIBX265_TB)
--LIBX265_SHA1   = 37ed92b83dbe9e1420e1c226d35caeea16d4b0e4
+-LIBX265_SHA1   = e2ef1ad186d9581239463d4e5177a25bc57b9fc0
 +LIBX265_SHA1   = 8c9aa3b87b0f0a418bbb9782e9354d112d75e003
  ifeq ($(CONFIG_PIE),yes)
  LIBX265_DIFFS  = libx265.pie.diff
  else
+diff --git a/support/patches/libx265.pie.diff b/support/patches/libx265.pie.diff
+index 570b84305..9c0b61a09 100644
+--- a/support/patches/libx265.pie.diff
++++ b/support/patches/libx265.pie.diff
+@@ -10,17 +10,3 @@ diff -urN ../x265_2.0.pic/source/CMakeLists.txt ./source/CMakeLists.txt
+      endif(ENABLE_PIC)
+      if(NATIVE_BUILD)
+          if(INTEL_CXX)
+-@@ -183,11 +183,11 @@
+-         endif()
+-     endif()
+-     if(ARM AND CROSS_COMPILE_ARM)
+--        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+-+        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIE)
+-     elseif(ARM)
+-         find_package(Neon)
+-         if(CPU_HAS_NEON)
+--            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+-+            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIE)
+-             add_definitions(-DHAVE_NEON)
+-         else()
+-             set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
