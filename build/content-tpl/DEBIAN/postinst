@@ -1,9 +1,31 @@
 #!/bin/bash
 
-if [[ $1 == "configure" ]]; then
+tvheadend_storage()
+{
+	if ! xbian-storager listvol | grep -qw storage$; then
+		xbian-storager createvol --mount $@ --name='xbian-package-tvheadend' storage /home/xbian/storage
+		chown -R xbian:xbian /home/xbian/storage
+	fi
+
+	mountpoint -q /home/xbian/storage || mount /home/xbian/storage 2>/dev/null
+
+	if [ ! -d /home/xbian/storage/tvheadend/recordings ] || [ ! -d /home/xbian/storage/tvheadend/timeshift ]; then
+		mkdir -p /home/xbian/storage/tvheadend/recordings
+		chattr +C /home/xbian/storage/tvheadend/recordings 2>/dev/null || :
+
+		mkdir -p /home/xbian/storage/tvheadend/timeshift
+		chattr +C /home/xbian/storage/tvheadend/timeshift 2>/dev/null || :
+
+		chown -R xbian:xbian /home/xbian/storage/tvheadend
+	fi
+}
+
+if [ "$1" = configure ]; then
 
 	chmod 664 /etc/default/tvheadend
 	chgrp xbian /etc/default/tvheadend
+
+	tvheadend_storage --exclude
 
 	if [ -d /home/xbian/.hts/tvheadend ]; then
 		[ -e /etc/default/tvheadend ] && . /etc/default/tvheadend
@@ -28,35 +50,6 @@ if [[ $1 == "configure" ]]; then
 		touch /tmp/tvheadend.start
 	fi
 
-	if ! btrfs-auto-snapshot listvol | grep -qw storage; then
-		btrfs-auto-snapshot createvol storage
-		if grep -q EXCLUDESUB /etc/default/xbian-snap; then
-			if ! grep -q EXCLUDESUB=.*storage /etc/default/xbian-snap; then
-				sed -i "s/EXCLUDESUB=/EXCLUDESUB=storage,/g" /etc/default/xbian-snap
-				sed -i 's/[, \t]*$//' /etc/default/xbian-snap
-			fi
-		else
-			echo EXCLUDESUB=storage >> /etc/default/xbian-snap
-		fi
-		mkdir -p /home/xbian/storage
-		chown -R xbian:xbian /home/xbian/storage
-	fi
-
-	if ! grep -qw /home/xbian/storage /etc/fstab; then
-		echo "# --- Added by xbian-package-tvheadend, modify only if you know what you're doing ---" >> /etc/fstab
-		echo "/dev/root                  /home/xbian/storage     xbian subvol=storage/@,noatime,rw                  0       0" >> /etc/fstab
-	fi
-
-	if ! mountpoint -q /home/xbian/storage; then
-		mount /home/xbian/storage &>/dev/null
-	fi
-
-	mkdir -p /home/xbian/storage/tvheadend/recordings
-	chattr +C /home/xbian/storage/tvheadend/recordings
-	mkdir -p /home/xbian/storage/tvheadend/timeshift
-	chattr +C /home/xbian/storage/tvheadend/timeshift
-	chown -R xbian:xbian /home/xbian/storage/tvheadend
-
 	[ -d /home/xbian/recordings ] || ln -s storage/tvheadend/recordings/ /home/xbian/recordings
 	chown -R xbian:xbian /home/xbian/recordings
 
@@ -71,10 +64,8 @@ if [[ $1 == "configure" ]]; then
     
 	grep -q "tvheadend" /usr/local/include/xbian-config/config/services || echo "tvheadend:" >> /usr/local/include/xbian-config/config/services
 
-elif [ $1 = triggered ]; then
+elif [ "$1" = triggered ]; then
 
     :
 
 fi
-
-exit 0
