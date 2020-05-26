@@ -7,6 +7,6 @@ Architecture: armhf
 __CTRLEXTRA__
 Suggests: xbian-package-xbmc
 Maintainer: mkreisl <development@xbian.org>
-Depends: ${shlibs:Depends}, dtv-scan-tables, xmltv-util, xbian-package-xbianhome, xbian-package-config-shell
+Depends: ${shlibs:Depends}, dtv-scan-tables, xmltv-util, xbian-package-xbianhome, xbian-package-config-shell (>=20181201-0)
 Homepage: https://tvheadend.org
 Description: TVheadend (__ARCHBRANCH__)
