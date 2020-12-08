@@ -1,0 +1,18 @@
+diff --git a/Makefile.ffmpeg b/Makefile.ffmpeg
+index d2a3e5056..a4b4a42ed 100644
+--- a/Makefile.ffmpeg
++++ b/Makefile.ffmpeg
+@@ -57,11 +57,11 @@ LIBX264_TB     = $(LIBX264).tar.bz2
+ LIBX264_URL    = https://code.videolan.org/videolan/x264/-/archive/$(LIBX264_VER)/$(LIBX264_TB)
+ LIBX264_SHA1   = 7b8da6f4283207b8ad77bab8890e3807f32013df
+ 
+-LIBX265_VER    = 3.4
++LIBX265_VER    = 1.9
+ LIBX265        = x265-$(LIBX265_VER)
+ LIBX265_TB     = $(LIBX265_VER).tar.gz
+ LIBX265_URL    = https://github.com/videolan/x265/archive/$(LIBX265_TB)
+-LIBX265_SHA1   = eef65f2f9518f3396825675aa86bdf82a55aa0d9
++LIBX265_SHA1   = 7e920a721d48171f821f132196049453883a7d0f
+ ifeq ($(CONFIG_PIE),yes)
+ LIBX265_DIFFS  = libx265.pie.diff
+ else
