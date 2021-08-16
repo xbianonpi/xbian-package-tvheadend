@@ -1,9 +1,4 @@
-# Master branch to staging
+# Master branch to stable
 
-rpi staging armv6l-${config_os_version}
-armhf staging armv7l-${config_os_version}
-
-# release/4.2 branch to stable
-
-rpi-4.2 stable armv6l-${config_os_version}
-armhf-4.2 stable armv7l-${config_os_version}
+rpi stable armv6l-${config_os_version}
+armhf stable armv7l-${config_os_version}
