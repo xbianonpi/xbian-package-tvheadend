@@ -3,7 +3,7 @@ Package: __PKGNAME__
 Version: __VERSION__
 Section: video
 Priority: optional
-Architecture: armhf
+Architecture: __ARCHITECTURE__
 __CTRLEXTRA__
 Suggests: xbian-package-xbmc
 Maintainer: mkreisl <development@xbian.org>
