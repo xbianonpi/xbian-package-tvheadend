@@ -1,0 +1,65 @@
+From c8947ea978c8e43b5e1b48c6259fe1820beb76ee Mon Sep 17 00:00:00 2001
+From: mkreisl <manfred.kreisl@nexgo.de>
+Date: Sat, 9 Dec 2023 16:06:04 +0100
+Subject: [PATCH] Fix for lib265+libtheora build
+
+---
+ Makefile.ffmpeg                        |  5 ++++-
+ support/patches/libx265-buildfix.patch | 15 +++++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+ create mode 100644 support/patches/libx265-buildfix.patch
+
+diff --git a/Makefile.ffmpeg b/Makefile.ffmpeg
+index 6cb66a5f2..e434cda21 100644
+--- a/Makefile.ffmpeg
++++ b/Makefile.ffmpeg
+@@ -68,6 +68,7 @@ else
+ LIBX265_DIFFS  = libx265.pic.diff
+ endif
+ LIBX265_DIFFS  += libx265-silence.patch
++LIBX265_DIFFS  += libx265-buildfix.patch
+ 
+ LIBVPX_VER     = 1.13.1
+ LIBVPX         = libvpx-$(LIBVPX_VER)
+@@ -400,6 +401,8 @@ LIBTHEORA_HOST := --host=$(FFMPEG_HOST)
+ endif
+ endif
+ 
++CONFIGURE_PATCH := sed -i 's/arm\*:Linux:\*:\*)/arm\*:Linux:\*:\*|aarch64\*:Linux:\*:\*)/g' config.guess
++
+ $(LIB_ROOT)/$(LIBTHEORA)/.tvh_download:
+ 	$(call DOWNLOAD,$(LIBTHEORA_URL),$(LIB_ROOT)/$(LIBTHEORA_TB),$(LIBTHEORA_SHA1))
+ 	$(call UNTAR,$(LIBTHEORA_TB),z)
+@@ -409,7 +412,7 @@ $(LIB_ROOT)/$(LIBTHEORA)/.tvh_build: \
+ 		$(LIB_ROOT)/$(NASM)/.tvh_build \
+ 		$(LIB_ROOT)/$(LIBOGG)/.tvh_build \
+ 		$(LIB_ROOT)/$(LIBTHEORA)/.tvh_download
+-	cd $(LIB_ROOT)/$(LIBTHEORA) && \
++	cd $(LIB_ROOT)/$(LIBTHEORA) && $(CONFIGURE_PATCH) &&\
+ 		$(CONFIGURE_PI) \
+ 		--libdir=/$(EPREFIX0)/lib \
+ 		--with-ogg=$(EPREFIX) \
+diff --git a/support/patches/libx265-buildfix.patch b/support/patches/libx265-buildfix.patch
+new file mode 100644
+index 000000000..ff98529bd
+--- /dev/null
++++ b/support/patches/libx265-buildfix.patch
+@@ -0,0 +1,15 @@
++--- ./source/CMakeLists.txt.o	2023-12-09 14:30:17.414103941 +0100
+++++ ./source/CMakeLists.txt	2023-12-09 15:58:56.776085488 +0100
++@@ -252,10 +252,10 @@
++         else()
++             find_package(Neon)
++             if(CPU_HAS_NEON)
++-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIE)
+++                set(ARM_ARGS -mfloat-abi=hard -marm -mfpu=neon -fPIE)
++                 add_definitions(-DHAVE_NEON)
++             else()
++-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+++                set(ARM_ARGS -mfloat-abi=hard -mfpu=vfp -marm)
++             endif()
++         endif()
++     endif()
+-- 
+2.39.2
+
