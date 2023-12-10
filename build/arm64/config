@@ -1,0 +1,4 @@
+config_build_env=schroot -c arm64${config_os_version} -p --
+config_deb_ctrlextra=Replaces: xbian-package-tvheadend-6q (<< 4.1-1525-1455718005~), hts-tvheadend\\nConflicts: xbian-package-tvheadend-6q (<< 4.1-1525-1455718005~)\\nBreaks: xbian-package-tvheadend-6q (<< 4.1-1525-1455718005~), xbian-update (<<1.0-1.2)
+config_source_configure=./configure --arch=arm64 --python=python3 --ldflags='-lz ' --enable-libffmpeg_static --enable-hdhomerun_static --disable-nvenc --prefix=/usr/local --includedir=/usr/local/include --mandir=/usr/local/share/man --infodir=/usr/local/share/info --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/local/lib/tvheadend --disable-dvbscan
+config_deb_arch=arm64

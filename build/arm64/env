@@ -1,0 +1,3 @@
+CFLAGS=-O3 -g -pipe -mtune=cortex-a72 -Wno-deprecated-declaration
+CPPFLAGS=$CFLAGS
+CXXFLAGS=$CFLAGS
