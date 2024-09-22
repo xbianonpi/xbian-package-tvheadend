@@ -48,18 +48,18 @@ index 000000000..ff98529bd
 +--- ./source/CMakeLists.txt.o	2023-12-09 14:30:17.414103941 +0100
 ++++ ./source/CMakeLists.txt	2023-12-09 15:58:56.776085488 +0100
 +@@ -252,10 +252,10 @@
++     elseif(ARM)
++         find_package(Neon)
++         if(CPU_HAS_NEON)
++-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+++            set(ARM_ARGS -mfloat-abi=hard -marm -mfpu=neon -fPIC)
++             add_definitions(-DHAVE_NEON)
 +         else()
-+             find_package(Neon)
-+             if(CPU_HAS_NEON)
-+-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIE)
-++                set(ARM_ARGS -mfloat-abi=hard -marm -mfpu=neon -fPIE)
-+                 add_definitions(-DHAVE_NEON)
-+             else()
-+-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
-++                set(ARM_ARGS -mfloat-abi=hard -mfpu=vfp -marm)
-+             endif()
++-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+++            set(ARM_ARGS -mfloat-abi=hard -mfpu=vfp -marm)
 +         endif()
 +     endif()
++       if(ARM64 OR CROSS_COMPILE_ARM64)
 -- 
 2.39.2
 
